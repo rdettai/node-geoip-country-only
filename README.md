@@ -1,39 +1,10 @@
-GeoIP-lite
-==========
+GeoIP-lite-country
+==================
 
-A native NodeJS API for the GeoLite data from MaxMind.
+Stripped down node-geoip-lite. Only supports country lookup and IPv4.
 
-This product includes GeoLite data created by MaxMind, available from http://maxmind.com/
+Software is written by Philip Tellis <philip@bluesmoon.info>, latest version is available at https://github.com/bluesmoon/node-geoip
 
-introduction
-------------
-
-MaxMind provides a set of data files for IP to Geo mapping along with opensource libraries to parse and lookup these data files.
-One would typically write a wrapper around their C API to get access to this data in other languages (like JavaScript).
-
-GeoIP-lite instead attempts to be a fully native JavaScript library.  A converter script converts the CSV files from MaxMind into
-an internal binary format (note that this is different from the binary data format provided by MaxMind).  The geoip module uses this
-binary file to lookup IP addresses and return the country, region and city that it maps to.
-
-Both IPv4 and IPv6 addresses are supported, however since the GeoLite IPv6 database does not currently contain any city or region
-information, city and region lookups are only supported for IPv4.
-
-philosophy
-----------
-
-I was really aiming for a fast JavaScript native implementation for geomapping of IPs.  My prime motivator was the fact that it was
-really hard to get libgeoip built for Mac OSX without using the library from MacPorts.
-
-why geoip-lite
---------------
-
-So why are we called geoip-lite?  `npm` already has a [geoip package](http://search.npmjs.org/#/geoip) which provides a JavaScript
-binding around libgeoip from MaxMind.  The `geoip` package is fully featured and supports everything that the MaxMind APIs support,
-however, it requires `libgeoip` to be installed on your system.
-
-`geoip-lite` on the other hand is a fully JavaScript implementation.  It is not as fully featured as `geoip` however, by reducing its
-scope, it is about 40% faster at doing lookups.  On average, an IP to Location lookup should take 20 microseconds on a Macbook Pro.
-IPv4 addresses take about 6 microseconds, while IPv6 addresses take about 30 microseconds.
 
 synopsis
 --------
@@ -47,16 +18,14 @@ var geo = geoip.lookup(ip);
 console.log(geo);
 { range: [ 3479299040, 3479299071 ],
   country: 'US',
-  region: 'CA',
-  city: 'San Francisco',
-  ll: [37.7484, -122.4156] }
+  region: '' }
 ```
 
 installation
 ------------
 ### 1. get the library
 
-    $ npm install geoip-lite
+    $ npm install geoip-lite-country
 
 ### 2. get the datafiles
 
@@ -71,9 +40,6 @@ There are no plans to change this.  `geoip-lite` stores all data in RAM in order
 
 API
 ---
-
-geoip-lite is completely synchronous.  There are no callbacks involved.  All blocking file IO is done at startup time, so all runtime
-calls are executed in-memory and are fast.  Startup may take up to 200ms while it reads into memory and indexes data files.
 
 ### Looking up an IP address ###
 
@@ -91,16 +57,11 @@ If the IP address was found, the `lookup` method returns an object with the foll
 {
    range: [ <low bound of IP block>, <high bound of IP block> ],
    country: 'XX',                 // 2 letter ISO-3166-1 country code
-   region: 'RR',                  // 2 character region code.  For US states this is the 2 letter
-                                  // ISO-3166-2 subcountry code for other countries, this is the
-                                  // FIPS 10-4 subcountry code
-   city: "City Name",             // This is the full city name
-   ll: [<latitude>, <longitude>]  // The latitude and longitude of the city
 }
 ```
 
-The actual values for the `range` array depend on whether the IP is IPv4 or IPv6 and should be
-considered internal to `geoip-lite`.  To get a human readable format, pass them to `geoip.pretty()`
+The actual values for the `range` array should be considered internal to `geoip-lite`.
+To get a human readable format, pass them to `geoip.pretty()`
 
 If the IP address was not found, the `lookup` returns `null`
 
