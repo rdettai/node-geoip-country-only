@@ -1,6 +1,6 @@
 {
 	"name"        :  "geoip-lite-country",
-	"version"     :  "1.1.8",
+	"version"     :  "100.1.8",
 	"description" :  "Stripped down version of geoip-lite, supporting only country lookup.",
 	"keywords"    :  ["geo", "geoip", "ip", "ipv4", "geolookup", "maxmind", "geolite", "country"],
 	"homepage"    :  "https://github.com/strml/node-geoip",
