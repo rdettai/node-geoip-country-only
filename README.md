@@ -1,9 +1,16 @@
-GeoIP-lite-country
-==================
+GeoIP-country-only
+=======================
 
-Stripped down node-geoip-lite. Only supports country lookup and IPv4.
+Stripped down node-geoip. Only supports country lookup and IPv4.
 
 Software is written by Philip Tellis <philip@bluesmoon.info>, latest version is available at https://github.com/bluesmoon/node-geoip
+
+This is forked from [node-geoip-country](https://github.com/arve0/node-geoip-country).
+
+This version relies on a `postinstall` hook to download the latest country data over https. It also
+includes a Node4-compatible `iconv-lite`.
+
+This repository has rebased out all `data/` files, so its size is only 890kB. `node-geoip` is over 170MB.
 
 
 synopsis
@@ -25,18 +32,12 @@ installation
 ------------
 ### 1. get the library
 
-    $ npm install geoip-lite-country
+    $ npm install geoip-country-only
 
 ### 2. get the datafiles
 
-Then download the city data files from https://github.com/bluesmoon/node-geoip/tree/master/data
-You need to get `geoip-city.dat` and `geoip-city-names.dat` and put them into the `data/` directory
-of this package.
-
-You could also run `npm run-script updatedb` to do this automatically.
-
-**NOTE** that this requires a lot of RAM.  It is known to fail on on a Digital Ocean or AWS micro instance.
-There are no plans to change this.  `geoip-lite` stores all data in RAM in order to be fast.
+The data files will be updated automatically on `postinstall`. You can update them yourself
+by running `npm run-script updatedb` (recommended on CI servers to bust cache).
 
 API
 ---
@@ -107,10 +108,6 @@ This package includes the GeoLite database from MaxMind.  This database is not t
 however it is the best available for free.  You can use the commercial GeoIP database from MaxMind with better
 accuracy by buying a license from MaxMind, and then using the conversion utility to convert it to a format that
 geoip-lite understands.  You will need to use the `.csv` files from MaxMind for conversion.
-
-Also note that on occassion, the library may take up to 5 seconds to load into memory.  This is largely dependent on
-how busy your disk is at that time.  It can take as little as 200ms on a lightly loaded disk.  This is a one time
-cost though, and you make it up at run time with very fast lookups.
 
 References
 ----------
